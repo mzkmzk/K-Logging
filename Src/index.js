@@ -1,12 +1,13 @@
 
-import Logging from './Logging'
+import singleKLogging from './singleKLogging'
 
 
     if ( typeof module != 'undefined' && module.exports ) {
-        module.exports = Logging
+        module.exports = singleKLogging
     } else if ( typeof define == 'function' && define.amd ) {
-            define( function () { return Logging } )
+            define( function () { return singleKLogging } )
     } else {
-        window.Logging = Logging
+        window.singleKLogging = singleKLogging
     }
-    window.Logging = Logging
+    window.singleKLogging = singleKLogging
+    //window.K_Logging = K_Logging

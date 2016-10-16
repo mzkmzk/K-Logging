@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://qiniu.404mzk.com/deepstream.min.js"></script>
+  </head>
+  <body>
+  <ul id="ul_log">
+    
+  </ul>
+    
+    <script type="text/javascript">
+
+    getUrlArgs = function(name) {
+        let args = {},
+            query = window.location.search.substring(1),
+            pairs = query.split('&')
+        for (var i = pairs.length - 1; i >= 0; i--) {
+            let pos = pairs[i].indexOf('='),
+                name = pairs[i].substring(0,pos),
+                value = pairs[i].substring(pos+1, pairs[i].length)
+            args[name] = value
+        }
+        if(name == undefined) return args
+        return args[name]    
+    }
+
+    var client = deepstream('120.24.37.206:6020').login()
+    var record = client.record.getRecord(getUrlArgs('app_name'))
+    
+    var ul_log = document.getElementById('ul_log')
+
+     record.subscribe('K-Logging', function(value) {
+        ul_log.innerHTML += '<li>'+value+'</li>'
+        
+     })
+
+
+    </script>
+  </body>
+</html>
