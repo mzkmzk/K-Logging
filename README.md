@@ -45,7 +45,3 @@ And it's just as easy with [npm](http://npmjs.com):
 npm i --save npm install k-logging 
 ```
 
-## Releases
-
-<https://github.com/mzkmzk/K-Logging/releases/>
-
