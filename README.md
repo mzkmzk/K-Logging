@@ -31,7 +31,7 @@ The corresponding website page is <http://qiniu.404mzk.com/website.html?app_name
 
 tips: The corresponding app_name and set consitent
 
-[see exaple.gif[]](http://qiniu.404mzk.com/k-logging_demo.gif)
+[see exaple.gif](http://qiniu.404mzk.com/k-logging_demo.gif)
 
 ## Installation
 
