@@ -1,10 +1,10 @@
 {
   "name": "k-logging",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "k-logging",
   "main": "index.js",
   "scripts": {
-    "publish": "export NODE_ENV=prod&&webpack  --progress --colors",
+    "publish-mac": "export NODE_ENV=prod&&webpack  --progress --colors",
     "publish-win": "set NODE_ENV=prod&&webpack  --progress --colors"
   },
   "repository": {
@@ -14,7 +14,7 @@
   "keywords": [
     "Journey"
   ],
-  "author": "K",
+  "author": "404k",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mzkmzk/ImageViewer/issues"

@@ -20,11 +20,13 @@ singleKLogging.setOptions(
       }
     )
 singleKLogging.info('info_msg')
-singleKLogging.warn('warm_msg')
+singleKLogging.warn('warn_msg')
 singleKLogging.error('warm_msg')
 ```
 
-对应的webisite页面<http://qiniu.404mzk.com/website.html?app_name=K-Logging>,参加app_name对应即可
+The corresponding website page is <http://qiniu.404mzk.com/website.html?app_name=K-Logging>
+
+tips: The corresponding app_name and set consitent
 
 ## Installation
 
@@ -35,7 +37,7 @@ singleKLogging.error('warm_msg')
 And it's just as easy with [npm](http://npmjs.com):
 
 ```sh
-npm i --save react //还没上,请稍等
+npm i --save npm install k-logging 
 ```
 
 ## Releases
