@@ -49,7 +49,3 @@ npm i --save npm install k-logging
 
 <https://github.com/mzkmzk/K-Logging/releases/>
 
-## License
-
-MIT
-
