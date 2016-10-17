@@ -8,7 +8,13 @@
   <body>
     <input type="text" />
     <script type="text/javascript">
-    window.singleKLogging.setOptions({app_name: 'maizhikun'})
+    singleKLogging.setOptions(
+      {
+        app_name: 'K-Logging',
+        open_level : ['info','warn','error'],
+        method: ['console','website'],
+      }
+    )
     singleKLogging.info('info_msg')
     singleKLogging.warn('warm_msg')
     singleKLogging.error('warm_msg')
