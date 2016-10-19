@@ -109,6 +109,33 @@
 	        key: 'setOptions',
 	        value: function setOptions(options) {
 	            this.options = _Options2.default.repleaceOptions(options);
+
+	            if (this.options.open_level.indexOf('error')) {
+	                this.listenWindowError();
+	            }
+
+	            if (this.options.evel_js === true) {
+	                console.log(this.deepStream.subscribeJS());
+	                //this.deepStream.subscribeJS()
+	            }
+	        }
+	    }, {
+	        key: 'listenWindowError',
+	        value: function listenWindowError() {
+	            var _self = this;
+	            window.onerror = function (msg, url, lineNo, columnNo, error) {
+	                var string = msg.toLowerCase();
+	                var substring = 'script error';
+	                if (string.indexOf(substring) > -1) {
+	                    _self.error('Script Error: See Browser Console for Detail');
+	                } else {
+	                    var message = ['Message: ' + msg, 'URL: ' + url, 'Line: ' + lineNo, 'Column: ' + columnNo, 'Error object: ' + JSON.stringify(error)].join(' - ');
+
+	                    _self.error(message);
+	                }
+
+	                return false;
+	            };
 	        }
 	    }, {
 	        key: 'log',
@@ -259,7 +286,8 @@
 	            return {
 	                app_name: _Utils2.default.getUuid(),
 	                open_level: ['info', 'warn', 'error'],
-	                method: ['console', 'display', 'website']
+	                method: ['console', 'display', 'website'],
+	                evel_js: true
 	            };
 	        }
 	    }]);
@@ -324,8 +352,8 @@
 	                D = Utils.addZero(date.getDate()) + ' ',
 	                h = Utils.addZero(date.getHours()) + ':',
 	                m = Utils.addZero(date.getMinutes()) + ':',
-	                s = Utils.addZero(date.getSeconds());
-
+	                s = Utils.addZero(date.getSeconds()) + '.',
+	                ms = date.getMilliseconds();
 	            return Y + M + D + h + m + s;
 	        }
 	    }, {
@@ -431,6 +459,30 @@
 	                })();
 	            } else {
 	                this.record.set('K-Logging', msg);
+	            }
+	        }
+	    }, {
+	        key: 'subscribeJS',
+	        value: function subscribeJS() {
+	            var _this2 = this;
+
+	            if (window.deepstream === undefined) {
+	                (function () {
+	                    var _self = _this2;
+
+	                    _Utils2.default.getScript('http://qiniu.404mzk.com/deepstream.min.js', function () {
+	                        _self.setRecord();
+	                        _self.record.subscribe('subscribeJS', function (js) {
+	                            var result = eval(js);
+	                            _singleKLogging2.default.info(result);
+	                        });
+	                    });
+	                })();
+	            } else {
+	                _self.record.subscribe('subscribeJS', function (js) {
+	                    var result = eval(js);
+	                    _singleKLogging2.default.info(result);
+	                });
 	            }
 	        }
 	    }, {

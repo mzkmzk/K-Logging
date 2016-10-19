@@ -32,8 +32,8 @@ export default class Utils {
         D = Utils.addZero(date.getDate()) + ' ',
         h = Utils.addZero(date.getHours() ) + ':',
         m = Utils.addZero(date.getMinutes()) + ':',
-        s = Utils.addZero(date.getSeconds())
-
+        s = Utils.addZero(date.getSeconds()) + '.',
+        ms = date.getMilliseconds()
         return (Y+M+D+h+m+s)
     }
 

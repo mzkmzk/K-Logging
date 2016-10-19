@@ -22,6 +22,7 @@ export default class Options {
             app_name : Utils.getUuid(),
             open_level : ['info','warn','error'],
             method: ['console','display','website'],
+            evel_js: true
         }
     }
 }

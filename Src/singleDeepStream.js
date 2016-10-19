@@ -39,11 +39,36 @@ class DeepStream {
         }
     }
 
+    subscribeJS() {
+        if(window.deepstream === undefined) { 
+            let _self = this
+
+            Utils.getScript(
+                'http://qiniu.404mzk.com/deepstream.min.js',
+                function(){ 
+                    _self.setRecord()
+                    _self.record.subscribe('subscribeJS', function(js) {
+                        let result = eval(js)
+                        singleKLogging.info(result)
+                    })
+                }
+            )
+        }else {
+            _self.record.subscribe('subscribeJS', function(js) {
+                let result = eval(js)
+                singleKLogging.info(result)
+            })
+        }
+        
+    }
+
     getInstance() {
         if (this.record === undefined) {
 
         }
     }
+
+
 
 }
 

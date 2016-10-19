@@ -4,6 +4,7 @@
     <script src="http://qiniu.404mzk.com/deepstream.min.js"></script>
   </head>
   <body>
+   <input type="text" /><button id="sned">发送</button>
   <ul id="ul_log">
     
   </ul>
@@ -30,9 +31,16 @@
     var ul_log = document.getElementById('ul_log')
 
      record.subscribe('K-Logging', function(value) {
-        ul_log.innerHTML += '<li>'+value+'</li>'
-        
+        ul_log.innerHTML += '<li>'+value+'</li>' 
      })
+
+     var input = document.querySelector('input')
+    
+      document.getElementById('sned').onclick = function(event) {
+          record.set('subscribeJS', input.value)
+      }
+     
+     
 
 
     </script>
