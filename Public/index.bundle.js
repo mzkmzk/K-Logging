@@ -115,10 +115,18 @@
 	            }
 
 	            if (this.options.evel_js === true) {
-	                console.log(this.deepStream.subscribeJS());
-	                //this.deepStream.subscribeJS()
+	                this.deepStream.subscribeJS();
+	            }
+
+	            if (this.options.switch_listener === true) {
+	                this.openSwitchListneer();
 	            }
 	        }
+
+	        /*
+	         * 监听浏览器自己的error,并捕抓出来
+	         */
+
 	    }, {
 	        key: 'listenWindowError',
 	        value: function listenWindowError() {
@@ -136,6 +144,27 @@
 
 	                return false;
 	            };
+	        }
+
+	        /*
+	         * 监听keyup事件,当密钥输入正确时,启动配置全开
+	         */
+
+	    }, {
+	        key: 'openSwitchListneer',
+	        value: function openSwitchListneer() {
+	            window.k_logging_key = '';
+	            var _self = this,
+	                switchListneerFunction = function switchListneerFunction(event) {
+	                window.k_logging_key += _Utils2.default.asciiToInt(event.keyCode);
+	                console.log(window.k_logging_key);
+	                if (window.k_logging_key.indexOf(_self.options.app_key) !== -1) {
+	                    _self.setOptions(_Options2.default.layerOpenOptions());
+	                    document.body.removeEventListener('keyup', switchListneerFunction);
+	                }
+	            };
+
+	            document.body.addEventListener('keyup', switchListneerFunction);
 	        }
 	    }, {
 	        key: 'log',
@@ -254,6 +283,10 @@
 
 	var _Utils2 = _interopRequireDefault(_Utils);
 
+	var _singleKLogging = __webpack_require__(1);
+
+	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -269,8 +302,9 @@
 
 	            if (options == undefined) return Options.getDefaultOptions();
 
-	            var defaultOptions = Options.getDefaultOptions(),
-	                keys = Object.keys(defaultOptions);
+	            var defaultOptions = _singleKLogging2.default.options || Options.getDefaultOptions(),
+	                //前者为layer时只替换部分属性
+	            keys = Object.keys(defaultOptions);
 
 	            for (var i = keys.length - 1; i >= 0; i--) {
 	                if (options[keys[i]] === undefined) {
@@ -284,10 +318,21 @@
 	        key: 'getDefaultOptions',
 	        value: function getDefaultOptions() {
 	            return {
-	                app_name: _Utils2.default.getUuid(),
+	                app_key: _Utils2.default.getUuid(), //default
 	                open_level: ['info', 'warn', 'error'],
 	                method: ['console', 'display', 'website'],
-	                evel_js: true
+	                evel_js: true,
+	                switch_listener: true
+	            };
+	        }
+	    }, {
+	        key: 'layerOpenOptions',
+	        value: function layerOpenOptions() {
+	            return {
+	                open_level: ['info', 'warn', 'error'],
+	                method: ['console', 'display', 'website'],
+	                evel_js: !_singleKLogging2.default.options,
+	                switch_listener: false
 	            };
 	        }
 	    }]);
@@ -387,6 +432,33 @@
 	            }
 	            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 	        }
+	    }, {
+	        key: 'asciiToInt',
+	        value: function asciiToInt(ascii) {
+	            var ASCII_TO_INT_OBJECT = {
+	                '31': '', '32': ' ', '33': '!', '34': '\"', '35': '#',
+	                '36': '$', '37': '%', '38': '&', '39': '\'', '40': '(',
+	                '41': ')', '42': '*', '43': '+', '44': ',', '45': '-',
+	                '46': '.', '47': '/', '48': '0', '49': '1', '50': '2',
+	                '51': '3', '52': '4', '53': '5', '54': '6', '55': '7',
+	                '56': '8', '57': '9', '58': ':', '59': ';', '60': '<',
+	                '61': '=', '62': '>', '63': '?', '64': '@', '65': 'A',
+	                '66': 'B', '67': 'C', '68': 'D', '69': 'E', '70': 'F',
+	                '71': 'G', '72': 'H', '73': 'I', '74': 'J', '75': 'K',
+	                '76': 'L', '77': 'M', '78': 'N', '79': 'O', '80': 'P',
+	                '81': 'Q', '82': 'R', '83': 'S', '84': 'T', '85': 'U',
+	                '86': 'V', '87': 'W', '88': 'X', '89': 'Y', '90': 'Z',
+	                '91': '[', '92': '\\', '93': ']', '94': '^', '95': '_',
+	                '96': '`', '97': 'a', '98': 'b', '99': 'c', '100': 'd',
+	                '101': 'e', '102': 'f', '103': 'g', '104': 'h', '105': 'i',
+	                '106': 'j', '107': 'k', '108': 'l', '109': 'm', '110': 'n',
+	                '111': 'o', '112': 'p', '113': 'q', '114': 'r', '115': 's',
+	                '116': 't', '117': 'u', '118': 'v', '119': 'w', '120': 'x',
+	                '121': 'y', '122': 'z', '123': '{', '124': '|', '125': '}',
+	                '126': '~', '127': ''
+	            };
+	            return ASCII_TO_INT_OBJECT[ascii];
+	        }
 	    }]);
 
 	    return Utils;
@@ -439,7 +511,7 @@
 	            if (this.record === undefined) {
 	                //防止多次连接 会有多个websocket连接
 	                var client = window.deepstream('120.24.37.206:6020').login();
-	                this.record = client.record.getRecord(_singleKLogging2.default.options.app_name || 'K-Logging');
+	                this.record = client.record.getRecord(_singleKLogging2.default.options.app_key || 'K-Logging');
 	            }
 	        }
 	    }, {
@@ -464,21 +536,17 @@
 	    }, {
 	        key: 'subscribeJS',
 	        value: function subscribeJS() {
-	            var _this2 = this;
-
+	            var _self = this;
 	            if (window.deepstream === undefined) {
-	                (function () {
-	                    var _self = _this2;
-
-	                    _Utils2.default.getScript('http://qiniu.404mzk.com/deepstream.min.js', function () {
-	                        _self.setRecord();
-	                        _self.record.subscribe('subscribeJS', function (js) {
-	                            var result = eval(js);
-	                            _singleKLogging2.default.info(result);
-	                        });
+	                _Utils2.default.getScript('http://qiniu.404mzk.com/deepstream.min.js', function () {
+	                    _self.setRecord();
+	                    _self.record.subscribe('subscribeJS', function (js) {
+	                        var result = eval(js);
+	                        _singleKLogging2.default.info(result);
 	                    });
-	                })();
+	                });
 	            } else {
+	                //这里应该加个判断,是否已经曾经接收过了
 	                _self.record.subscribe('subscribeJS', function (js) {
 	                    var result = eval(js);
 	                    _singleKLogging2.default.info(result);

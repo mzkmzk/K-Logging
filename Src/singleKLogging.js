@@ -21,11 +21,18 @@ import singleDeepStream from './singleDeepStream'
         }
 
         if(this.options.evel_js === true) {
-            console.log(this.deepStream.subscribeJS())
-            //this.deepStream.subscribeJS()
+            this.deepStream.subscribeJS()
         }
-    }
 
+        if(this.options.switch_listener === true) {
+            this.openSwitchListneer()
+        }
+
+    }
+    
+    /*
+     * 监听浏览器自己的error,并捕抓出来
+     */
     listenWindowError(){
         let _self = this
         window.onerror = function (msg, url, lineNo, columnNo, error) {
@@ -47,6 +54,27 @@ import singleDeepStream from './singleDeepStream'
 
             return false
         }
+    }
+    
+    /*
+     * 监听keyup事件,当密钥输入正确时,启动配置全开
+     */
+    openSwitchListneer() {
+        window.k_logging_key = ''
+        let  _self = this,
+            switchListneerFunction = function(event){
+                window.k_logging_key += Utils.asciiToInt(event.keyCode)
+                console.log(window.k_logging_key)
+                if (window.k_logging_key.indexOf(_self.options.app_key) !== -1) {
+                    _self.setOptions(Options.layerOpenOptions())
+                    document.body.removeEventListener('keyup',switchListneerFunction)
+                }
+            }
+
+        document.body.addEventListener('keyup',switchListneerFunction)
+
+
+        
     }
 
     log(msg = '',level = 0) {
