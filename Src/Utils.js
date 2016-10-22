@@ -27,14 +27,15 @@ export default class Utils {
 
     static getDate() {
         let date = new Date(),
-        Y = date.getFullYear() + '-',
+        Y = '',
+        //Y = date.getFullYear() + '-',
         M = Utils.addZero(date.getMonth()+1) + '-',
         D = Utils.addZero(date.getDate()) + ' ',
         h = Utils.addZero(date.getHours() ) + ':',
         m = Utils.addZero(date.getMinutes()) + ':',
         s = Utils.addZero(date.getSeconds()) + '.',
         ms = date.getMilliseconds()
-        return (Y+M+D+h+m+s)
+        return (Y+M+D+h+m+s+ms)
     }
 
     static addZero(num) {

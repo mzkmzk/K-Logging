@@ -96,6 +96,7 @@
 	    function K_Logging() {
 	        _classCallCheck(this, K_Logging);
 
+	        var localstrage_uuid = localStorage.getItem('k_logging_uuid');
 	        this.data = {
 	            'info': [],
 	            'warn': [],
@@ -103,6 +104,14 @@
 	        };
 	        this.options = _Options2.default.getDefaultOptions();
 	        this.deepStream = _singleDeepStream2.default;
+	        this.url = window.location.href;
+	        if (localstrage_uuid) {
+	            this.uuid = localstrage_uuid;
+	        } else {
+	            var uuid = _Utils2.default.getUuid();
+	            localStorage.setItem('k_logging_uuid', uuid);
+	            this.uuid = uuid;
+	        }
 	    }
 
 	    _createClass(K_Logging, [{
@@ -197,7 +206,9 @@
 	            var packagingMsg = {
 	                'date': _Utils2.default.getDate(),
 	                level: level,
-	                msg: msg
+	                msg: msg,
+	                'uuid': this.uuid,
+	                'url': this.url
 	            };
 	            return JSON.stringify(packagingMsg);
 	        }
@@ -392,14 +403,16 @@
 	        key: 'getDate',
 	        value: function getDate() {
 	            var date = new Date(),
-	                Y = date.getFullYear() + '-',
-	                M = Utils.addZero(date.getMonth() + 1) + '-',
+	                Y = '',
+
+	            //Y = date.getFullYear() + '-',
+	            M = Utils.addZero(date.getMonth() + 1) + '-',
 	                D = Utils.addZero(date.getDate()) + ' ',
 	                h = Utils.addZero(date.getHours()) + ':',
 	                m = Utils.addZero(date.getMinutes()) + ':',
 	                s = Utils.addZero(date.getSeconds()) + '.',
 	                ms = date.getMilliseconds();
-	            return Y + M + D + h + m + s;
+	            return Y + M + D + h + m + s + ms;
 	        }
 	    }, {
 	        key: 'addZero',

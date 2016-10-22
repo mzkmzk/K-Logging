@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="http://qiniu.404mzk.com/deepstream.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://qiniu.404mzk.com/jquery.dataTables.min.css">
   </head>
   <body>
    <input type="text" /><button id="sned">发送</button>
   <ul id="ul_log">
     
   </ul>
-    
+    <table id="k_logging" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>类型</th>
+                <th width="70%">信息</th>
+                <th>Url</th>
+                <th>客户端uuid</th>
+                <th>时间</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>类型</th>
+                <th width="70%">信息</th>
+                <th>Url</th>
+                <th>客户端uuid</th>
+                <th>时间</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        </tbody>
+    </table>
+    <script src="http://qiniu.404mzk.com/deepstream.min.js"></script>
     <script type="text/javascript">
 
     getUrlArgs = function(name) {
@@ -26,23 +48,57 @@
     }
 
     var client = deepstream('120.24.37.206:6020').login()
-    var record = client.record.getRecord(getUrlArgs('app_name'))
+    var record = client.record.getRecord(getUrlArgs('app_key') || getUrlArgs('app_name'))
     
-    var ul_log = document.getElementById('ul_log')
-
-     record.subscribe('K-Logging', function(value) {
-        ul_log.innerHTML += '<li>'+value+'</li>' 
-     })
-
      var input = document.querySelector('input')
     
       document.getElementById('sned').onclick = function(event) {
           record.set('subscribeJS', input.value)
       }
-     
-     
+    </script>
+    <script src="http://qiniu.404mzk.com/jquery-1.12.3.js"></script>
+    <script src="http://qiniu.404mzk.com/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+      $('#k_logging tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+      } );
+ 
+      var table = $('#k_logging').DataTable({
+         "order": [[ 4, "asc" ]],
+         "lengthMenu": [[100,  -1], [100, "All"]]
+      });
+
+       table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+
+      window.uuidData = []
+      record.subscribe('K-Logging', function(value) {
+        var data = JSON.parse(value);
+        var uuid = window.uuidData.indexOf(data.uuid);
+        if(uuid === -1) {
+          uuid = (window.uuidData.push(data.uuid) -1)
+        }
 
 
+        table.row.add([
+          data.level,
+          data.msg,
+          data.url,
+          (uuid+data.uuid.substring(data.uuid.length-4)),
+          data.date
+        ]).draw(false)
+       
+     })
     </script>
   </body>
 </html>

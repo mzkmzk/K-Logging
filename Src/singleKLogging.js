@@ -4,13 +4,23 @@ import singleDeepStream from './singleDeepStream'
 
  class K_Logging {
     constructor() {
+
+        let localstrage_uuid = localStorage.getItem('k_logging_uuid')
         this.data = {
             'info': [],
             'warn': [],
             'error': [] 
         }
         this.options = Options.getDefaultOptions()
-        this.deepStream = singleDeepStream   
+        this.deepStream = singleDeepStream  
+        this.url = window.location.href
+        if (localstrage_uuid) {
+            this.uuid = localstrage_uuid
+        } else {
+            let uuid = Utils.getUuid()
+            localStorage.setItem('k_logging_uuid',uuid)
+            this.uuid = uuid
+        }
     }
 
     setOptions(options) {
@@ -99,7 +109,9 @@ import singleDeepStream from './singleDeepStream'
         let packagingMsg = {
             'date': Utils.getDate(),
             level,
-            msg
+            msg,
+            'uuid': this.uuid,
+            'url': this.url
         }
         return JSON.stringify(packagingMsg)
     }
