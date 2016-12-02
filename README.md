@@ -19,7 +19,7 @@ singleKLogging.setOptions(
       {
         app_name: 'K-Logging',
         open_level : ['info','warn','error'],
-        method: ['console','website'],
+        method: ['console','display', 'website'],
       }
 )
 singleKLogging.info('info_msg')
