@@ -1,6 +1,6 @@
 {
   "name": "k-logging",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "k-logging",
   "main": "index.js",
   "scripts": {

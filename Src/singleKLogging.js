@@ -1,5 +1,6 @@
 import Options from './Options'
 import Utils from './Utils'
+import Display from './Display'
 import singleDeepStream from './singleDeepStream'
 
  class K_Logging {
@@ -12,7 +13,8 @@ import singleDeepStream from './singleDeepStream'
             'error': [] 
         }
         this.options = Options.getDefaultOptions()
-        this.deepStream = singleDeepStream  
+        
+
         this.url = window.location.href
         if (localstrage_uuid) {
             this.uuid = localstrage_uuid
@@ -25,6 +27,9 @@ import singleDeepStream from './singleDeepStream'
 
     setOptions(options) {
         this.options = Options.repleaceOptions(options) 
+        
+        this.k_display = new Display(this.options)
+        this.deepStream = singleDeepStream  
 
         if(this.options.open_level.indexOf('error')) {
             this.listenWindowError()
@@ -88,6 +93,7 @@ import singleDeepStream from './singleDeepStream'
     }
 
     log(msg = '',level = 0) {
+        let row_msg = msg
         msg = this.packagingMsg(msg, level)
         
         //屏蔽级别
@@ -98,7 +104,7 @@ import singleDeepStream from './singleDeepStream'
             this.console(msg,level)
         }
         if(this.options.method.indexOf('display') !== -1) {
-            this.display(msg,level)
+            this.display(row_msg,level)
         }
         if(this.options.method.indexOf('website') !== -1) {
             this.website(msg,level)
@@ -126,7 +132,9 @@ import singleDeepStream from './singleDeepStream'
         }
     }
 
-    display(msg = '', level = 0) {}
+    display(msg = '', level = 0) {
+        this.k_display.sendMsg(msg)
+    }
 
     website(msg = '') {
         this.deepStream.sendMsg(msg)

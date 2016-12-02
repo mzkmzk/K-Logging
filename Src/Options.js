@@ -23,6 +23,18 @@ export default class Options {
             app_key : Utils.getUuid(), //default
             open_level : ['info','warn','error'],
             method: ['console','display','website'],
+            display: {
+                css: {
+                    top: '40px',
+                    left: 0,
+                    background: '#DBDBDB',
+                    'overflow-y': 'scroll',
+                    'overflow-x': 'hidden'
+                },
+                //'position': 'fixed', //not change
+                canMove: true, //是否可以移动
+                initMin: true //刚开始是否为最小化
+            },
             evel_js: true,
             switch_listener: true
         }

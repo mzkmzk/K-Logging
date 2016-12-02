@@ -84,11 +84,7 @@
 
 	var _Utils2 = _interopRequireDefault(_Utils);
 
-	var _Display = __webpack_require__(4);
-
-	var _Display2 = _interopRequireDefault(_Display);
-
-	var _singleDeepStream = __webpack_require__(5);
+	var _singleDeepStream = __webpack_require__(4);
 
 	var _singleDeepStream2 = _interopRequireDefault(_singleDeepStream);
 
@@ -107,7 +103,7 @@
 	            'error': []
 	        };
 	        this.options = _Options2.default.getDefaultOptions();
-
+	        this.deepStream = _singleDeepStream2.default;
 	        this.url = window.location.href;
 	        if (localstrage_uuid) {
 	            this.uuid = localstrage_uuid;
@@ -122,9 +118,6 @@
 	        key: 'setOptions',
 	        value: function setOptions(options) {
 	            this.options = _Options2.default.repleaceOptions(options);
-
-	            this.k_display = new _Display2.default(this.options);
-	            this.deepStream = _singleDeepStream2.default;
 
 	            if (this.options.open_level.indexOf('error')) {
 	                this.listenWindowError();
@@ -188,7 +181,6 @@
 	            var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	            var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-	            var row_msg = msg;
 	            msg = this.packagingMsg(msg, level);
 
 	            //屏蔽级别
@@ -199,7 +191,7 @@
 	                this.console(msg, level);
 	            }
 	            if (this.options.method.indexOf('display') !== -1) {
-	                this.display(row_msg, level);
+	                this.display(msg, level);
 	            }
 	            if (this.options.method.indexOf('website') !== -1) {
 	                this.website(msg, level);
@@ -249,8 +241,6 @@
 	        value: function display() {
 	            var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	            var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
-	            this.k_display.sendMsg(msg);
 	        }
 	    }, {
 	        key: 'website',
@@ -342,18 +332,6 @@
 	                app_key: _Utils2.default.getUuid(), //default
 	                open_level: ['info', 'warn', 'error'],
 	                method: ['console', 'display', 'website'],
-	                display: {
-	                    css: {
-	                        top: '40px',
-	                        left: 0,
-	                        background: '#DBDBDB',
-	                        'overflow-y': 'scroll',
-	                        'overflow-x': 'hidden'
-	                    },
-	                    //'position': 'fixed', //not change
-	                    canMove: true, //是否可以移动
-	                    initMin: true //刚开始是否为最小化
-	                },
 	                evel_js: true,
 	                switch_listener: true
 	            };
@@ -503,67 +481,6 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Utils = __webpack_require__(3);
-
-	var _Utils2 = _interopRequireDefault(_Utils);
-
-	var _Options = __webpack_require__(2);
-
-	var _Options2 = _interopRequireDefault(_Options);
-
-	var _singleKLogging = __webpack_require__(1);
-
-	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Display = function () {
-	    function Display(options) {
-	        _classCallCheck(this, Display);
-
-	        var div_display = document.getElementById('k-logging');
-
-	        if (div_display == null) {
-	            div_display = document.createElement('div');
-	            div_display.style.position = 'fixed';
-	            div_display.setAttribute('id', 'k-logging');
-	            document.body.appendChild(div_display);
-	        }
-	        //还没把css注入和隐藏显示
-	        //let div_display_html = '\
-	        //    appendChild\
-	        //'
-	        var div_display_html = '            <h3>K-Logging                 <span onclick="document.getElementById("k-logging").style.display = none;" style="float: right;cursor: pointer;">\u5173\u95ED                </span>            </h3>            <textarea id="k-logging-msg"> \n            </textarea>';
-	        div_display.innerHTML = div_display_html;
-	    }
-
-	    _createClass(Display, [{
-	        key: 'sendMsg',
-	        value: function sendMsg(msg) {
-	            var k_logging_msg = document.getElementById('k-logging-msg');
-	            k_logging_msg.value += msg + '\n';
-	        }
-	    }]);
-
-	    return Display;
-	}();
-
-	exports.default = Display;
-
-/***/ },
-/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
