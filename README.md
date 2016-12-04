@@ -33,6 +33,13 @@ tips: The corresponding app_name and set consitent
 
 [see exaple.gif](http://qiniu.404mzk.com/k-logging_demo.gif)
 
+## DEMO
+
+
+<http://k-logging.404mzk.com/Example/Website/index.html>
+
+website show: <http://k-logging.404mzk.com/Example/Website/website.html?app_key=klogging>
+
 ## Installation
 
 ```html
@@ -45,3 +52,13 @@ And it's just as easy with [npm](http://npmjs.com):
 npm i --save npm install k-logging 
 ```
 
+## API
+
+
+| key             | options                         | default                         | instructions                                                                                                                                   |
+|-----------------|---------------------------------|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| app_key         | Any Numbers and letters         | ''                              | A unique identifier                                                                                                                            |
+| open_level      | ['info','warn','error']         | ['info','warn','error']         | Limit the output level                                                                                                                         |
+| method          | ['console','display','website'] | ['console','display','website'] | Output way                                                                                                                                     |
+| evel_js         | Boolean                         | false                           | Whether in the display and input box to perform js website                                                                                     |
+| switch_listener | Boolean                         | true                            | Whether listening to restore the default Settings, the commissioning of the web page is true, type app_key will return to the default Settings |

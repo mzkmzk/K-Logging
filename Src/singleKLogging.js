@@ -3,6 +3,7 @@ import Utils from './Utils'
 import Display from './Display'
 import singleDeepStream from './singleDeepStream'
 
+
  class K_Logging {
     constructor() {
 
@@ -28,10 +29,13 @@ import singleDeepStream from './singleDeepStream'
     setOptions(options) {
         this.options = Options.repleaceOptions(options) 
         
+        //if(this.options.method.indexOf('display') !== -1 ) { 为了正式环境下没开也可以看调试信息
         this.k_display = new Display(this.options)
+        //}
+
         this.deepStream = singleDeepStream  
 
-        if(this.options.open_level.indexOf('error')) {
+        if(this.options.open_level.indexOf('error') !== -1) {
             this.listenWindowError()
         }
 
@@ -79,8 +83,7 @@ import singleDeepStream from './singleDeepStream'
         let  _self = this,
             switchListneerFunction = function(event){
                 window.k_logging_key += Utils.asciiToInt(event.keyCode)
-                console.log(window.k_logging_key)
-                if (window.k_logging_key.indexOf(_self.options.app_key) !== -1) {
+                if (window.k_logging_key.toLowerCase().indexOf(_self.options.app_key.toLowerCase()) !== -1) {
                     _self.setOptions(Options.layerOpenOptions())
                     document.body.removeEventListener('keyup',switchListneerFunction)
                 }
@@ -103,9 +106,9 @@ import singleDeepStream from './singleDeepStream'
         if(this.options.method.indexOf('console') !== -1) {
             this.console(msg,level)
         }
-        if(this.options.method.indexOf('display') !== -1) {
+        //if(this.options.method.indexOf('display') !== -1) { 无论有无都输出到display,只不过把框框隐藏起来
             this.display(row_msg,level)
-        }
+        //}
         if(this.options.method.indexOf('website') !== -1) {
             this.website(msg,level)
         }

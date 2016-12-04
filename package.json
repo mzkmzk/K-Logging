@@ -1,8 +1,8 @@
 {
   "name": "k-logging",
-  "version": "0.0.6",
+  "version": "0.1.8",
   "description": "k-logging",
-  "main": "index.js",
+  "main": "Public/index.bundle.js",
   "scripts": {
     "publish-mac": "export NODE_ENV=prod&&webpack  --progress --colors",
     "publish-win": "set NODE_ENV=prod&&webpack  --progress --colors"

@@ -35,7 +35,7 @@ export default class Options {
                 canMove: true, //是否可以移动
                 initMin: true //刚开始是否为最小化
             },
-            evel_js: true,
+            evel_js: false,
             switch_listener: true
         }
     }
@@ -44,7 +44,7 @@ export default class Options {
         return {
             open_level : ['info','warn','error'],
             method: ['console','display','website'],
-            evel_js: !singleKLogging.options , 
+            evel_js: false,//!singleKLogging.options , 
             switch_listener: false
         }
     }
