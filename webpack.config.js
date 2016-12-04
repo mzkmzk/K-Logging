@@ -57,12 +57,12 @@ module.exports = {
     },
     plugins: [
         //压缩JS
-        new webpack.DefinePlugin({
+        /*new webpack.DefinePlugin({
               'process.env': {
                 NODE_ENV: JSON.stringify('production')
               }
             }),
-        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.optimize.UglifyJsPlugin(),*/
 
         //七牛插件
         /*new QiniuPlugin({
