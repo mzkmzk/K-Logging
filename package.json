@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mzkmzk/ImageViewer.git"
+    "url": "git+https://github.com/mzkmzk/K-Logging.git"
   },
   "keywords": [
     "Journey"
@@ -17,9 +17,9 @@
   "author": "404k",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mzkmzk/ImageViewer/issues"
+    "url": "https://github.com/mzkmzk/K-Logging/issues"
   },
-  "homepage": "https://github.com/mzkmzk/ImageViewer#readme",
+  "homepage": "https://github.com/mzkmzk/K-Logging#readme",
   "dependencies": {
     "file-loader": "0.9.0"
   },
