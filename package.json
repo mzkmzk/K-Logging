@@ -1,6 +1,6 @@
 {
   "name": "k-logging",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "k-logging",
   "main": "Public/index.bundle.js",
   "scripts": {
