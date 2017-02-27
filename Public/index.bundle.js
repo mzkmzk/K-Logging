@@ -1,2 +1,661 @@
-!function(e){function t(i){if(n[i])return n[i].exports;var o=n[i]={exports:{},id:i,loaded:!1};return e[i].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var n={};return t.m=e,t.c=n,t.p="",t(0)}([function(e,t,n){function i(e){return e&&e.__esModule?e:{"default":e}}var o,r=n(2),a=i(r);"undefined"!=typeof e&&e.exports?e.exports=a["default"]:(o=function(){return a["default"]}.call(t,n,t,e),!(void 0!==o&&(e.exports=o))),window.singleKLogging=a["default"]},function(e,t){"use strict";function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),o=function(){function e(){n(this,e)}return i(e,null,[{key:"getScript",value:function(e,t){var n=document.getElementsByTagName("head")[0],i=document.createElement("script");i.setAttribute("type","text/javascript"),i.setAttribute("src",e),n.appendChild(i);var o=function(){"function"==typeof t&&t()};document.all?i.onreadystatechange=function(){"loaded"!=i.readyState&&"complete"!=i.readyState||o()}:i.onload=function(){o()}}},{key:"getDate",value:function(){var t=new Date,n="",i=e.addZero(t.getMonth()+1)+"-",o=e.addZero(t.getDate())+" ",r=e.addZero(t.getHours())+":",a=e.addZero(t.getMinutes())+":",l=e.addZero(t.getSeconds())+".",s=t.getMilliseconds();return n+i+o+r+a+l+s}},{key:"addZero",value:function(e){return e<10?"0"+e:e}},{key:"getUrlArgs",value:function(e){for(var t={},n=window.location.search.substring(1),i=n.split("&"),o=i.length-1;o>=0;o--){var r=i[o].indexOf("="),a=i[o].substring(0,r),l=i[o].substring(r+1,i[o].length);t[a]=l}return void 0==e?t:t[e]}},{key:"getUuid",value:function(){function e(){return Math.floor(65536*(1+Math.random())).toString(16).substring(1)}return e()+e()+"-"+e()+"-"+e()+"-"+e()+"-"+e()+e()+e()}},{key:"asciiToInt",value:function(e){var t={31:"",32:" ",33:"!",34:'"',35:"#",36:"$",37:"%",38:"&",39:"'",40:"(",41:")",42:"*",43:"+",44:",",45:"-",46:".",47:"/",48:"0",49:"1",50:"2",51:"3",52:"4",53:"5",54:"6",55:"7",56:"8",57:"9",58:":",59:";",60:"<",61:"=",62:">",63:"?",64:"@",65:"A",66:"B",67:"C",68:"D",69:"E",70:"F",71:"G",72:"H",73:"I",74:"J",75:"K",76:"L",77:"M",78:"N",79:"O",80:"P",81:"Q",82:"R",83:"S",84:"T",85:"U",86:"V",87:"W",88:"X",89:"Y",90:"Z",91:"[",92:"\\",93:"]",94:"^",95:"_",96:"`",97:"a",98:"b",99:"c",100:"d",101:"e",102:"f",103:"g",104:"h",105:"i",106:"j",107:"k",108:"l",109:"m",110:"n",111:"o",112:"p",113:"q",114:"r",115:"s",116:"t",117:"u",118:"v",119:"w",120:"x",121:"y",122:"z",123:"{",124:"|",125:"}",126:"~",127:""};return t[e]}}]),e}();t["default"]=o},function(e,t,n){"use strict";function i(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),a=n(3),l=i(a),s=n(1),u=i(s),d=n(4),c=i(d),f=n(5),g=i(f),p=function(){function e(){o(this,e);var t=localStorage.getItem("k_logging_uuid");if(this.data={info:[],warn:[],error:[]},this.options=l["default"].getDefaultOptions(),this.url=window.location.href,t)this.uuid=t;else{var n=u["default"].getUuid();localStorage.setItem("k_logging_uuid",n),this.uuid=n}}return r(e,[{key:"setOptions",value:function(e){this.options=l["default"].repleaceOptions(e),this.k_display=new c["default"](this.options),this.deepStream=g["default"],this.options.open_level.indexOf("error")!==-1&&this.listenWindowError(),this.options.evel_js===!0&&this.deepStream.subscribeJS(),this.options.switch_listener===!0&&this.openSwitchListneer()}},{key:"listenWindowError",value:function(){var e=this;window.onerror=function(t,n,i,o,r){var a=t.toLowerCase(),l="script error";if(a.indexOf(l)>-1)e.error("Script Error: See Browser Console for Detail");else{var s=["Message: "+t,"URL: "+n,"Line: "+i,"Column: "+o,"Error object: "+JSON.stringify(r)].join(" - ");e.error(s)}return!1}}},{key:"openSwitchListneer",value:function(){window.k_logging_key="";var e=this,t=function n(t){window.k_logging_key+=u["default"].asciiToInt(t.keyCode),window.k_logging_key.toLowerCase().indexOf(e.options.app_key.toLowerCase())!==-1&&(e.setOptions(l["default"].layerOpenOptions()),document.body.removeEventListener("keyup",n))};document.body.addEventListener("keyup",t)}},{key:"log",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0,n=e;e=this.packagingMsg(e,t),this.options.open_level.indexOf(t)!==-1&&(this.options.method.indexOf("console")!==-1&&this.console(e,t),this.display(n,t),this.options.method.indexOf("website")!==-1&&this.website(e,t))}},{key:"packagingMsg",value:function t(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0,t={date:u["default"].getDate(),level:n,msg:e,uuid:this.uuid,url:this.url};return JSON.stringify(t)}},{key:"console",value:function(e){function t(){return e.apply(this,arguments)}return t.toString=function(){return e.toString()},t}(function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;"info"===t?console.log(e):"warn"===t?console.warn(e):"error"===t&&console.error(e)})},{key:"display",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;this.k_display.sendMsg(e)}},{key:"website",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";this.deepStream.sendMsg(e)}},{key:"info",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";this.log(e,"info")}},{key:"warn",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";this.log(e,"warn")}},{key:"error",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";this.log(e,"error")}}]),e}();t["default"]=new p},function(e,t,n){"use strict";function i(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),a=n(1),l=i(a),s=n(2),u=i(s),d=function(){function e(){o(this,e)}return r(e,null,[{key:"repleaceOptions",value:function(t){if(void 0==t)return e.getDefaultOptions();for(var n=u["default"].options||e.getDefaultOptions(),i=Object.keys(n),o=i.length-1;o>=0;o--)void 0===t[i[o]]&&(t[i[o]]=n[i[o]]);return t}},{key:"getDefaultOptions",value:function(){return{app_key:l["default"].getUuid(),open_level:["info","warn","error"],method:["console","display","website"],display:{css:{top:"40px",left:0,background:"#DBDBDB","overflow-y":"scroll","overflow-x":"hidden"},canMove:!0,initMin:!0},evel_js:!1,switch_listener:!0}}},{key:"layerOpenOptions",value:function(){return{open_level:["info","warn","error"],method:["console","display","website"],evel_js:!1,//!singleKLogging.options , 
-switch_listener:!1}}}]),e}();t["default"]=d},function(module,exports,__webpack_require__){"use strict";function _interopRequireDefault(e){return e&&e.__esModule?e:{"default":e}}function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(exports,"__esModule",{value:!0});var _createClass=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),_Utils=__webpack_require__(1),_Utils2=_interopRequireDefault(_Utils),_Options=__webpack_require__(3),_Options2=_interopRequireDefault(_Options),_singleKLogging=__webpack_require__(2),_singleKLogging2=_interopRequireDefault(_singleKLogging),Display=function(){function Display(options){_classCallCheck(this,Display);var div_display=document.getElementById("k-logging");if(null==div_display){div_display=document.createElement("div"),div_display.style.cssText="position:fixed;top:0;left:0;z-index:999",div_display.style.position="fixed",div_display.setAttribute("id","k-logging"),document.body.appendChild(div_display);var div_display_html="\n            <h3>K-Logging \n                <span onclick=\"document.getElementById('k-logging').style.display = 'none';\" style='float: right;cursor: pointer;'>关闭\n                </span>\n            </h3>\n            <textarea id='k-logging-msg' style='resize:auto;width:200px;height:200px' placeholder='k-logging display'></textarea>";div_display.innerHTML=div_display_html,options.evel_js===!0&&(div_display.innerHTML+="\n                    <textarea id='k-logging-evel'  style='resize:auto;width:100px;height:200px' placeholder='eval_js'></textarea>\n                    <buttom id='eval_js_buttom'>确定</buttom>\n                ",document.getElementById("eval_js_buttom").addEventListener("click",function(){eval(document.getElementById("k-logging-evel").value)}))}options.method.indexOf("display")===-1?div_display.style.display="none":div_display.style.display="block"}return _createClass(Display,[{key:"sendMsg",value:function(e){var t=document.getElementById("k-logging-msg");t.value+=e+"\n"}}]),Display}();exports["default"]=Display},function(module,exports,__webpack_require__){"use strict";function _interopRequireDefault(e){return e&&e.__esModule?e:{"default":e}}function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(exports,"__esModule",{value:!0});var _createClass=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),_Utils=__webpack_require__(1),_Utils2=_interopRequireDefault(_Utils),_singleKLogging=__webpack_require__(2),_singleKLogging2=_interopRequireDefault(_singleKLogging),DeepStream=function(){function DeepStream(){_classCallCheck(this,DeepStream)}return _createClass(DeepStream,[{key:"setRecord",value:function(){if(void 0===this.record){var e=window.deepstream("120.24.37.206:6020").login();this.record=e.record.getRecord(_singleKLogging2["default"].options.app_key||"K-Logging")}}},{key:"sendMsg",value:function(e){var t=this;void 0===window.deepstream?!function(){var n=t;_Utils2["default"].getScript("http://qiniu.404mzk.com/deepstream.min.js",function(){n.setRecord(),n.record.set("K-Logging",e)})}():this.record.set("K-Logging",e)}},{key:"subscribeJS",value:function subscribeJS(){var _self=this;void 0===window.deepstream?_Utils2["default"].getScript("http://qiniu.404mzk.com/deepstream.min.js",function(){_self.setRecord(),_self.record.subscribe("subscribeJS",function(js){var result=eval(js);_singleKLogging2["default"].info(result)})}):_self.record.subscribe("subscribeJS",function(js){var result=eval(js);_singleKLogging2["default"].info(result)})}},{key:"getInstance",value:function(){void 0===this.record}}]),DeepStream}();exports["default"]=new DeepStream}]);
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("k_logging", [], factory);
+	else if(typeof exports === 'object')
+		exports["k_logging"] = factory();
+	else
+		root["k_logging"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _singleKLogging = __webpack_require__(1);
+
+	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	exports['default'] = _singleKLogging2['default']; //import 'babel-polyfill'
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _Options = __webpack_require__(2);
+
+	var _Options2 = _interopRequireDefault(_Options);
+
+	var _Utils = __webpack_require__(3);
+
+	var _Utils2 = _interopRequireDefault(_Utils);
+
+	var _Display = __webpack_require__(4);
+
+	var _Display2 = _interopRequireDefault(_Display);
+
+	var _singleDeepStream = __webpack_require__(5);
+
+	var _singleDeepStream2 = _interopRequireDefault(_singleDeepStream);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var K_Logging = function () {
+	    function K_Logging() {
+	        _classCallCheck(this, K_Logging);
+
+	        try {
+	            var localstrage_uuid = window.localStorage && localStorage.getItem('k_logging_uuid');
+	            this.data = {
+	                'info': [],
+	                'warn': [],
+	                'error': []
+	            };
+	            this.options = _Options2['default'].getDefaultOptions();
+
+	            this.url = window.location.href;
+	            if (localstrage_uuid) {
+	                this.uuid = localstrage_uuid;
+	            } else {
+	                var uuid = _Utils2['default'].getUuid();
+	                localStorage.setItem('k_logging_uuid', uuid);
+	                this.uuid = uuid;
+	            }
+	        } catch (e) {}
+	    }
+
+	    K_Logging.prototype.setOptions = function setOptions(options) {
+	        this.options = _Options2['default'].repleaceOptions(options);
+
+	        //if(this.options.method.indexOf('display') !== -1 ) { 为了正式环境下没开也可以看调试信息
+	        this.k_display = new _Display2['default'](this.options);
+	        //}
+
+	        this.deepStream = _singleDeepStream2['default'];
+
+	        if (this.options.open_level.indexOf('error') !== -1) {
+	            this.listenWindowError();
+	        }
+
+	        if (this.options.evel_js === true && this.options.method.indexOf('website') !== -1) {
+	            this.deepStream.subscribeJS();
+	        }
+
+	        if (this.options.switch_listener === true) {
+	            this.openSwitchListneer();
+	        }
+	    };
+
+	    /*
+	     * 监听浏览器自己的error,并捕抓出来
+	     */
+
+
+	    K_Logging.prototype.listenWindowError = function listenWindowError() {
+	        var _self = this;
+	        window.onerror = function (msg, url, lineNo, columnNo, error) {
+	            var string = msg.toLowerCase();
+	            var substring = 'script error';
+	            if (string.indexOf(substring) > -1) {
+	                _self.error('Script Error: See Browser Console for Detail');
+	            } else {
+	                var message = ['Message: ' + msg, 'URL: ' + url, 'Line: ' + lineNo, 'Column: ' + columnNo, 'Error object: ' + JSON.stringify(error)].join(' - ');
+
+	                _self.error(message);
+	            }
+
+	            return false;
+	        };
+	    };
+
+	    /*
+	     * 监听keyup事件,当密钥输入正确时,启动配置全开
+	     */
+
+
+	    K_Logging.prototype.openSwitchListneer = function openSwitchListneer() {
+	        window.k_logging_key = '';
+	        window.k_logging_click_key = '';
+	        var _self = this,
+	            switchKeyupListenerFunction = function switchKeyupListenerFunction(event) {
+	            window.k_logging_key += _Utils2['default'].asciiToInt(event.keyCode);
+	            if (window.k_logging_key.toLowerCase().indexOf(_self.options.app_key.toLowerCase()) !== -1) {
+	                _self.setOptions(_Options2['default'].layerOpenOptions());
+	                document.body.removeEventListener('keyup', switchListneerFunction);
+	            }
+	        },
+	            clickNum = 4321,
+	            switchClickListenerFunction = function switchClickListenerFunction(event) {
+	            window.k_logging_click_key += _Utils2['default'].clickToNum(event);
+	            if (window.k_logging_click_key.indexOf(clickNum) !== -1) {
+	                _self.setOptions(_Options2['default'].layerOpenOptions());
+	                document.body.removeEventListener('click', switchClickListenerFunction);
+	            }
+	        };
+
+	        document.body.addEventListener('keyup', switchKeyupListenerFunction);
+	        document.addEventListener('click', switchClickListenerFunction);
+	    };
+
+	    K_Logging.prototype.log = function log() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+	        var row_msg = msg;
+	        msg = this.packagingMsg(msg, level);
+
+	        //屏蔽级别
+	        if (this.options.open_level.indexOf(level) === -1) return;
+
+	        //选择输出口
+	        if (this.options.method.indexOf('console') !== -1) {
+	            this.console(msg, level);
+	        }
+	        //if(this.options.method.indexOf('display') !== -1) { 无论有无都输出到display,只不过把框框隐藏起来
+	        this.display(row_msg, level);
+	        //}
+	        if (this.options.method.indexOf('website') !== -1) {
+	            this.website(msg, level);
+	        }
+	    };
+
+	    K_Logging.prototype.packagingMsg = function packagingMsg() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+	        var packagingMsg = {
+	            'date': _Utils2['default'].getDate(),
+	            level: level,
+	            msg: msg,
+	            'uuid': this.uuid,
+	            'url': this.url
+	        };
+	        return JSON.stringify(packagingMsg);
+	    };
+
+	    K_Logging.prototype.console = function (_console) {
+	        function console() {
+	            return _console.apply(this, arguments);
+	        }
+
+	        console.toString = function () {
+	            return _console.toString();
+	        };
+
+	        return console;
+	    }(function () {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+	        if (level === 'info') {
+	            console.log(msg);
+	        } else if (level === 'warn') {
+	            console.warn(msg);
+	        } else if (level === 'error') {
+	            console.error(msg);
+	        }
+	    });
+
+	    K_Logging.prototype.display = function display() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+	        this.k_display.sendMsg(msg);
+	    };
+
+	    K_Logging.prototype.website = function website() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+	        this.deepStream.sendMsg(msg);
+	        //this.deepStream.record.set('firstname', msg)
+	    };
+
+	    K_Logging.prototype.info = function info() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+	        this.log(msg, 'info');
+	    };
+
+	    K_Logging.prototype.warn = function warn() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+	        this.log(msg, 'warn');
+	    };
+
+	    K_Logging.prototype.error = function error() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+	        this.log(msg, 'error');
+	    };
+
+	    return K_Logging;
+	}();
+
+	var singple = new K_Logging();
+	window.singleKLogging = singple; //兼容之前
+
+	exports['default'] = singple;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _Utils = __webpack_require__(3);
+
+	var _Utils2 = _interopRequireDefault(_Utils);
+
+	var _singleKLogging = __webpack_require__(1);
+
+	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Options = function () {
+	    function Options() {
+	        _classCallCheck(this, Options);
+	    }
+
+	    Options.repleaceOptions = function repleaceOptions(options) {
+
+	        if (options == undefined) return Options.getDefaultOptions();
+
+	        var defaultOptions = _singleKLogging2['default'].options || Options.getDefaultOptions(),
+	            //前者为layer时只替换部分属性
+	        keys = Object.keys(defaultOptions);
+
+	        for (var i = keys.length - 1; i >= 0; i--) {
+	            if (options[keys[i]] === undefined) {
+	                options[keys[i]] = defaultOptions[keys[i]];
+	            }
+	        }
+
+	        return options;
+	    };
+
+	    Options.getDefaultOptions = function getDefaultOptions() {
+	        return {
+	            app_key: _Utils2['default'].getUuid(), //default
+	            open_level: ['info', 'warn', 'error'],
+	            method: ['console', 'display', 'website'],
+	            display: {
+	                css: {
+	                    top: '40px',
+	                    left: 0,
+	                    background: '#DBDBDB',
+	                    'overflow-y': 'scroll',
+	                    'overflow-x': 'hidden'
+	                },
+	                //'position': 'fixed', //not change
+	                canMove: true, //是否可以移动
+	                initMin: true //刚开始是否为最小化
+	            },
+	            evel_js: false,
+	            switch_listener: true
+	        };
+	    };
+
+	    Options.layerOpenOptions = function layerOpenOptions() {
+	        return {
+	            open_level: ['info', 'warn', 'error'],
+	            method: ['console', 'display', 'website'],
+	            evel_js: false, //!singleKLogging.options , 
+	            switch_listener: false
+	        };
+	    };
+
+	    return Options;
+	}();
+
+	exports['default'] = Options;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Utils = function () {
+	    function Utils() {
+	        _classCallCheck(this, Utils);
+	    }
+
+	    Utils.getScript = function getScript(url, callback) {
+	        var head = document.getElementsByTagName('head')[0],
+	            js = document.createElement('script');
+	        js.setAttribute('type', 'text/javascript');
+	        js.setAttribute('src', url);
+	        head.appendChild(js);
+	        //执行回调
+	        var callbackFn = function callbackFn() {
+	            if (typeof callback === 'function') {
+	                callback();
+	            }
+	        };
+	        if (document.all) {
+	            //IE
+	            js.onreadystatechange = function () {
+	                if (js.readyState == 'loaded' || js.readyState == 'complete') {
+	                    callbackFn();
+	                }
+	            };
+	        } else {
+	            js.onload = function () {
+	                callbackFn();
+	            };
+	        }
+	    };
+
+	    Utils.getDate = function getDate() {
+	        var date = new Date(),
+	            Y = '',
+
+	        //Y = date.getFullYear() + '-',
+	        M = Utils.addZero(date.getMonth() + 1) + '-',
+	            D = Utils.addZero(date.getDate()) + ' ',
+	            h = Utils.addZero(date.getHours()) + ':',
+	            m = Utils.addZero(date.getMinutes()) + ':',
+	            s = Utils.addZero(date.getSeconds()) + '.',
+	            ms = date.getMilliseconds();
+	        return Y + M + D + h + m + s + ms;
+	    };
+
+	    Utils.addZero = function addZero(num) {
+	        if (num < 10) {
+	            return '0' + num;
+	        }
+	        return num;
+	    };
+
+	    Utils.getUrlArgs = function getUrlArgs(name) {
+	        var args = {},
+	            query = window.location.search.substring(1),
+	            pairs = query.split('&');
+	        for (var i = pairs.length - 1; i >= 0; i--) {
+	            var pos = pairs[i].indexOf('='),
+	                _name = pairs[i].substring(0, pos),
+	                value = pairs[i].substring(pos + 1, pairs[i].length);
+	            args[_name] = value;
+	        }
+	        if (name == undefined) return args;
+	        return args[name];
+	    };
+
+	    Utils.getUuid = function getUuid() {
+	        function s4() {
+	            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+	        }
+	        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	    };
+
+	    Utils.asciiToInt = function asciiToInt(ascii) {
+	        var ASCII_TO_INT_OBJECT = {
+	            '31': '', '32': ' ', '33': '!', '34': '\"', '35': '#',
+	            '36': '$', '37': '%', '38': '&', '39': '\'', '40': '(',
+	            '41': ')', '42': '*', '43': '+', '44': ',', '45': '-',
+	            '46': '.', '47': '/', '48': '0', '49': '1', '50': '2',
+	            '51': '3', '52': '4', '53': '5', '54': '6', '55': '7',
+	            '56': '8', '57': '9', '58': ':', '59': ';', '60': '<',
+	            '61': '=', '62': '>', '63': '?', '64': '@', '65': 'A',
+	            '66': 'B', '67': 'C', '68': 'D', '69': 'E', '70': 'F',
+	            '71': 'G', '72': 'H', '73': 'I', '74': 'J', '75': 'K',
+	            '76': 'L', '77': 'M', '78': 'N', '79': 'O', '80': 'P',
+	            '81': 'Q', '82': 'R', '83': 'S', '84': 'T', '85': 'U',
+	            '86': 'V', '87': 'W', '88': 'X', '89': 'Y', '90': 'Z',
+	            '91': '[', '92': '\\', '93': ']', '94': '^', '95': '_',
+	            '96': '`', '97': 'a', '98': 'b', '99': 'c', '100': 'd',
+	            '101': 'e', '102': 'f', '103': 'g', '104': 'h', '105': 'i',
+	            '106': 'j', '107': 'k', '108': 'l', '109': 'm', '110': 'n',
+	            '111': 'o', '112': 'p', '113': 'q', '114': 'r', '115': 's',
+	            '116': 't', '117': 'u', '118': 'v', '119': 'w', '120': 'x',
+	            '121': 'y', '122': 'z', '123': '{', '124': '|', '125': '}',
+	            '126': '~', '127': ''
+	        };
+	        return ASCII_TO_INT_OBJECT[ascii];
+	    };
+
+	    Utils.clickToNum = function clickToNum(event) {
+	        var client_width_half = document.documentElement.clientWidth / 2,
+	            client_height_half = document.documentElement.clientHeight / 2,
+	            click_x = event.x,
+	            click_y = event.y;
+	        if (click_x > client_width_half && click_y < client_height_half) {
+	            return 1;
+	        } else if (click_x < client_width_half && click_y < client_height_half) {
+	            return 2;
+	        } else if (click_x < client_width_half && click_y > client_height_half) {
+	            return 3;
+	        } else if (click_x > client_width_half && click_y > client_height_half) {
+	            return 4;
+	        } else {
+	            return 0;
+	        }
+	    };
+
+	    return Utils;
+	}();
+
+	exports['default'] = Utils;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _Utils = __webpack_require__(3);
+
+	var _Utils2 = _interopRequireDefault(_Utils);
+
+	var _Options = __webpack_require__(2);
+
+	var _Options2 = _interopRequireDefault(_Options);
+
+	var _singleKLogging = __webpack_require__(1);
+
+	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Display = function () {
+	    function Display(options) {
+	        _classCallCheck(this, Display);
+
+	        var div_display = document.getElementById('k-logging');
+
+	        if (div_display == null) {
+	            div_display = document.createElement('div');
+	            div_display.style.cssText = 'position:fixed;top:0;left:0;z-index:999';
+	            div_display.style.position = 'fixed';
+	            div_display.setAttribute('id', 'k-logging');
+	            document.body.appendChild(div_display);
+
+	            var div_display_html = '\n            <h3>K-Logging \n                <span onclick="document.getElementById(\'k-logging\').style.display = \'none\';" style=\'float: right;cursor: pointer;\'>\u5173\u95ED\n                </span>\n            </h3>\n            <textarea id=\'k-logging-msg\' style=\'resize:auto;width:200px;height:200px\' placeholder=\'k-logging display\'></textarea>';
+	            div_display.innerHTML = div_display_html;
+
+	            if (options.evel_js === true) {
+
+	                div_display.innerHTML += '\n                    <textarea id=\'k-logging-evel\'  style=\'resize:auto;width:100px;height:200px\' placeholder=\'eval_js\'></textarea>\n                    <buttom id=\'eval_js_buttom\'>\u786E\u5B9A</buttom>\n                ';
+	                document.getElementById('eval_js_buttom').addEventListener('click', function () {
+	                    eval(document.getElementById('k-logging-evel').value);
+	                });
+	            }
+	        }
+
+	        if (options.method.indexOf('display') === -1) {
+	            div_display.style.display = 'none';
+	        } else {
+	            div_display.style.display = 'block';
+	        }
+	    }
+
+	    Display.prototype.sendMsg = function sendMsg(msg) {
+	        var k_logging_msg = document.getElementById('k-logging-msg');
+	        k_logging_msg.value += msg + '\n';
+	    };
+
+	    return Display;
+	}();
+
+	exports['default'] = Display;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _Utils = __webpack_require__(3);
+
+	var _Utils2 = _interopRequireDefault(_Utils);
+
+	var _singleKLogging = __webpack_require__(1);
+
+	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var DeepStream = function () {
+	    function DeepStream() {
+	        //console.log('DeepStream.constructor被调用了')
+	        /*if(window.deepstream === undefined) { 
+	            Utils.getScript(
+	                'https://qiniu.404mzk.com/deepstream.min.js',
+	                this.setRecord()
+	            )
+	        }else {
+	            this.setRecord()
+	        }*/
+
+	        _classCallCheck(this, DeepStream);
+	    }
+
+	    DeepStream.prototype.setRecord = function setRecord() {
+	        if (this.record === undefined) {
+	            //防止多次连接 会有多个websocket连接
+	            var client = window.deepstream('120.24.37.206:6020').login();
+	            this.record = client.record.getRecord(_singleKLogging2['default'].options.app_key || 'K-Logging');
+	        }
+	    };
+
+	    DeepStream.prototype.sendMsg = function sendMsg(msg) {
+	        var _this = this;
+
+	        //消息频率较高时,会执行多次加载脚本
+	        if (window.deepstream === undefined) {
+	            (function () {
+	                var _self = _this;
+
+	                _Utils2['default'].getScript('http://qiniu.404mzk.com/deepstream.min.js', function () {
+	                    _self.setRecord();
+	                    _self.record.set('K-Logging', msg);
+	                });
+	            })();
+	        } else {
+	            this.record.set('K-Logging', msg);
+	        }
+	    };
+
+	    DeepStream.prototype.subscribeJS = function subscribeJS() {
+	        var _self = this;
+	        if (window.deepstream === undefined) {
+	            _Utils2['default'].getScript('http://qiniu.404mzk.com/deepstream.min.js', function () {
+	                _self.setRecord();
+	                _self.record.subscribe('subscribeJS', function (js) {
+	                    var result = eval(js);
+	                    _singleKLogging2['default'].info(result);
+	                });
+	            });
+	        } else {
+	            //这里应该加个判断,是否已经曾经接收过了
+	            _self.record.subscribe('subscribeJS', function (js) {
+	                var result = eval(js);
+	                _singleKLogging2['default'].info(result);
+	            });
+	        }
+	    };
+
+	    DeepStream.prototype.getInstance = function getInstance() {
+	        if (this.record === undefined) {}
+	    };
+
+	    return DeepStream;
+	}();
+
+	exports['default'] = new DeepStream();
+
+/***/ }
+/******/ ])
+});
+;

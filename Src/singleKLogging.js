@@ -6,24 +6,26 @@ import singleDeepStream from './singleDeepStream'
 
  class K_Logging {
     constructor() {
+        try {
+            let localstrage_uuid = window.localStorage && localStorage.getItem('k_logging_uuid')
+            this.data = {
+                'info': [],
+                'warn': [],
+                'error': [] 
+            }
+            this.options = Options.getDefaultOptions()
+            
 
-        let localstrage_uuid = localStorage.getItem('k_logging_uuid')
-        this.data = {
-            'info': [],
-            'warn': [],
-            'error': [] 
-        }
-        this.options = Options.getDefaultOptions()
+            this.url = window.location.href
+            if (localstrage_uuid) {
+                this.uuid = localstrage_uuid
+            } else {
+                let uuid = Utils.getUuid()
+                localStorage.setItem('k_logging_uuid',uuid)
+                this.uuid = uuid
+            }
+        }catch(e){}
         
-
-        this.url = window.location.href
-        if (localstrage_uuid) {
-            this.uuid = localstrage_uuid
-        } else {
-            let uuid = Utils.getUuid()
-            localStorage.setItem('k_logging_uuid',uuid)
-            this.uuid = uuid
-        }
     }
 
     setOptions(options) {
@@ -39,7 +41,7 @@ import singleDeepStream from './singleDeepStream'
             this.listenWindowError()
         }
 
-        if(this.options.evel_js === true) {
+        if(this.options.evel_js === true && this.options.method.indexOf('website') !== -1) {
             this.deepStream.subscribeJS()
         }
 
@@ -80,17 +82,26 @@ import singleDeepStream from './singleDeepStream'
      */
     openSwitchListneer() {
         window.k_logging_key = ''
+        window.k_logging_click_key = ''
         let  _self = this,
-            switchListneerFunction = function(event){
+            switchKeyupListenerFunction = function(event){
                 window.k_logging_key += Utils.asciiToInt(event.keyCode)
                 if (window.k_logging_key.toLowerCase().indexOf(_self.options.app_key.toLowerCase()) !== -1) {
                     _self.setOptions(Options.layerOpenOptions())
                     document.body.removeEventListener('keyup',switchListneerFunction)
                 }
+            },
+            clickNum = 432112344321,
+            switchClickListenerFunction = function(event){
+                window.k_logging_click_key += Utils.clickToNum(event)
+                if (window.k_logging_click_key.indexOf(clickNum) !== -1  ) {
+                    _self.setOptions(Options.layerOpenOptions())
+                    document.body.removeEventListener('click',switchClickListenerFunction)
+                }
             }
 
-        document.body.addEventListener('keyup',switchListneerFunction)
-
+        document.body.addEventListener('keyup',switchKeyupListenerFunction)
+        document.addEventListener('click',switchClickListenerFunction)
 
         
     }
@@ -157,5 +168,8 @@ import singleDeepStream from './singleDeepStream'
     }
 }
 
-export default new K_Logging()
+let singple = new K_Logging()
+window.singleKLogging = singple //兼容之前
+
+export default singple
 

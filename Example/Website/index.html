@@ -9,17 +9,23 @@
   <body>
     
     <script type="text/javascript">
+    
     singleKLogging.setOptions(
       {
         app_key: 'klogging',
         open_level : ['info','warn','error'],
-        method: ['console','display','website'],
+        method: ['console','','website'],
+        switch_listener: true,
         evel_js: true
       }
     )
     singleKLogging.info('info_msg')
     singleKLogging.warn('warn_msg')
     singleKLogging.error('error_msg')
+    document.addEventListener('click',function(e){
+      singleKLogging.info(e);
+      console.log(e.x +"  "+e.y);
+    })
     //document.body.addEventListener('keyup',function(event){
       //console.log("".fromCharCode(event.keyCode));
     //})

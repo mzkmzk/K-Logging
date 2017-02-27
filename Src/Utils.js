@@ -1,4 +1,3 @@
-
 export default class Utils {
     static getScript(url, callback) {
         let head = document.getElementsByTagName('head')[0],
@@ -93,6 +92,24 @@ export default class Utils {
             '126': '~',    '127': ''
         }
         return ASCII_TO_INT_OBJECT[ascii]
+    }
+
+    static clickToNum(event){
+        let client_width_half = document.documentElement.clientWidth / 2,
+            client_height_half = document.documentElement.clientHeight / 2,
+            click_x = event.x,
+            click_y = event.y
+        if (  click_x > client_width_half && click_y < client_height_half ) {
+            return 1
+        }else if ( click_x < client_width_half && click_y < client_height_half ) {
+            return 2
+        }else if ( click_x < client_width_half && click_y > client_height_half ) {
+            return 3
+        }else if ( click_x > client_width_half && click_y > client_height_half ) {
+            return 4
+        }else {
+            return 0
+        }
     }
 
 }

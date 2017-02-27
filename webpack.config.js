@@ -1,6 +1,15 @@
 
 
 const webpack = require('webpack');
+/*,
+        ,
+    "plugins" : [
+         "transform-object-assign",
+         ["transform-es2015-modules-commonjs", { "loose": true }],
+         "transform-es3-property-literals",
+         "transform-es3-member-expression-literals"
+    ], "*/
+var libraryName = 'k_logging';
 
 module.exports = {
     entry: {
@@ -9,6 +18,9 @@ module.exports = {
     //devtool: "cheap-module-source-map",
     output: {
         path: 'Public',
+        library: libraryName,
+        libraryTarget: 'umd',
+        umdNamedDefine: true,
         filename: '[name].bundle.js'
     },
     module: {
