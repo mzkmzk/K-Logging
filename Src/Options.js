@@ -23,6 +23,7 @@ export default class Options {
             app_key : Utils.getUuid(), //default
             open_level : ['info','warn','error'],
             method: ['console','display','website'],
+            no_listen_jquery_ajax: false,
             display: {
                 css: {
                     top: '40px',
@@ -43,7 +44,7 @@ export default class Options {
     static layerOpenOptions() {
         return {
             open_level : ['info','warn','error'],
-            method: ['console','display','website'],
+            method: ['console','display','website','k-report'],
             evel_js: false,//!singleKLogging.options , 
             switch_listener: false
         }

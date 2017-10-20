@@ -58,37 +58,78 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _singleKLogging = __webpack_require__(1);
+	__webpack_require__(1);
+
+	var _singleKLogging = __webpack_require__(2);
 
 	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	exports['default'] = _singleKLogging2['default']; //import 'babel-polyfill'
+	//import 'babel-polyfill'
+	exports['default'] = _singleKLogging2['default'];
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	if (!Object.keys) {
+	  Object.keys = function () {
+	    var hasOwnProperty = Object.prototype.hasOwnProperty,
+	        hasDontEnumBug = !{ toString: null }.propertyIsEnumerable('toString'),
+	        dontEnums = ['toString', 'toLocaleString', 'valueOf', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'constructor'],
+	        dontEnumsLength = dontEnums.length;
+
+	    return function (obj) {
+	      if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
+
+	      var result = [];
+
+	      for (var prop in obj) {
+	        if (hasOwnProperty.call(obj, prop)) result.push(prop);
+	      }
+
+	      if (hasDontEnumBug) {
+	        for (var i = 0; i < dontEnumsLength; i++) {
+	          if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
+	        }
+	      }
+	      return result;
+	    };
+	  }();
+	};
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _Options = __webpack_require__(2);
+	var _Options = __webpack_require__(3);
 
 	var _Options2 = _interopRequireDefault(_Options);
 
-	var _Utils = __webpack_require__(3);
+	var _Utils = __webpack_require__(4);
 
 	var _Utils2 = _interopRequireDefault(_Utils);
 
-	var _Display = __webpack_require__(4);
+	var _Display = __webpack_require__(5);
 
 	var _Display2 = _interopRequireDefault(_Display);
 
-	var _singleDeepStream = __webpack_require__(5);
+	var _singleDeepStream = __webpack_require__(6);
 
 	var _singleDeepStream2 = _interopRequireDefault(_singleDeepStream);
+
+	var _CONSTANT = __webpack_require__(7);
+
+	var _CONSTANT2 = _interopRequireDefault(_CONSTANT);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -135,11 +176,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.deepStream.subscribeJS();
 	        }
 
+	        if (this.options.no_listen_jquery_ajax === false) {
+	            this.listenJqueryAjax();
+	        }
+
 	        if (this.options.switch_listener === true) {
 	            this.openSwitchListneer();
 	        }
 	    };
 
+	    K_Logging.prototype.listenJqueryAjax = function listenJqueryAjax() {
+	        var _this = this;
+
+	        var jqueryDocument = $ && $(document);
+	        if (jqueryDocument.ajaxComplete) {
+	            jQuery.ajaxPrefilter("script", function (s) {
+	                s.global = true;
+	            });
+	            jqueryDocument.ajaxComplete(function (event, request, settings) {
+	                if (!request) request = {};
+	                var result = {
+	                    category: 'k-logging',
+	                    name: 'jqueryAjaxComplete',
+	                    data: {
+	                        url: settings.url,
+	                        responseJSON: request.responseJSON,
+	                        readyState: request.readyState,
+	                        status: request.status
+	                    }
+	                };
+	                _this.info(JSON.stringify(result));
+	            });
+	        }
+	    };
 	    /*
 	     * 监听浏览器自己的error,并捕抓出来
 	     */
@@ -175,10 +244,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            window.k_logging_key += _Utils2['default'].asciiToInt(event.keyCode);
 	            if (window.k_logging_key.toLowerCase().indexOf(_self.options.app_key.toLowerCase()) !== -1) {
 	                _self.setOptions(_Options2['default'].layerOpenOptions());
-	                document.body.removeEventListener('keyup', switchListneerFunction);
+	                document.body.removeEventListener('keyup', switchKeyupListenerFunction);
 	            }
 	        },
-	            clickNum = 4321,
+	            clickNum = 432112344321,
 	            switchClickListenerFunction = function switchClickListenerFunction(event) {
 	            window.k_logging_click_key += _Utils2['default'].clickToNum(event);
 	            if (window.k_logging_click_key.indexOf(clickNum) !== -1) {
@@ -187,8 +256,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 
-	        document.body.addEventListener('keyup', switchKeyupListenerFunction);
-	        document.addEventListener('click', switchClickListenerFunction);
+	        document.body.addEventListener && document.body.addEventListener('keyup', switchKeyupListenerFunction);
+	        document.body.addEventListener && document.addEventListener('click', switchClickListenerFunction);
 	    };
 
 	    K_Logging.prototype.log = function log() {
@@ -205,6 +274,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.options.method.indexOf('console') !== -1) {
 	            this.console(msg, level);
 	        }
+
+	        if (this.options.method.indexOf('k_report') !== -1) {
+	            this.k_report(msg, level);
+	        }
+
 	        //if(this.options.method.indexOf('display') !== -1) { 无论有无都输出到display,只不过把框框隐藏起来
 	        this.display(row_msg, level);
 	        //}
@@ -264,6 +338,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //this.deepStream.record.set('firstname', msg)
 	    };
 
+	    K_Logging.prototype.k_report = function k_report() {
+	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+	        new Image().src = _CONSTANT2['default'].URL.LOG_INSERT + "?" + "message=" + encodeURIComponent(message) + "&" + "type=" + level + "&" + "referer=" + window.location.href + "&" + "t=" + new Date().getTime();
+	    };
+
 	    K_Logging.prototype.info = function info() {
 	        var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
@@ -291,18 +372,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = singple;
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _Utils = __webpack_require__(3);
+	var _Utils = __webpack_require__(4);
 
 	var _Utils2 = _interopRequireDefault(_Utils);
 
-	var _singleKLogging = __webpack_require__(1);
+	var _singleKLogging = __webpack_require__(2);
 
 	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
 
@@ -337,6 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            app_key: _Utils2['default'].getUuid(), //default
 	            open_level: ['info', 'warn', 'error'],
 	            method: ['console', 'display', 'website'],
+	            no_listen_jquery_ajax: false,
 	            display: {
 	                css: {
 	                    top: '40px',
@@ -357,7 +439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Options.layerOpenOptions = function layerOpenOptions() {
 	        return {
 	            open_level: ['info', 'warn', 'error'],
-	            method: ['console', 'display', 'website'],
+	            method: ['console', 'display', 'website', 'k-report'],
 	            evel_js: false, //!singleKLogging.options , 
 	            switch_listener: false
 	        };
@@ -369,7 +451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = Options;
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -501,22 +583,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = Utils;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _Utils = __webpack_require__(3);
+	var _Utils = __webpack_require__(4);
 
 	var _Utils2 = _interopRequireDefault(_Utils);
 
-	var _Options = __webpack_require__(2);
+	var _Options = __webpack_require__(3);
 
 	var _Options2 = _interopRequireDefault(_Options);
 
-	var _singleKLogging = __webpack_require__(1);
+	var _singleKLogging = __webpack_require__(2);
 
 	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
 
@@ -567,18 +649,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = Display;
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _Utils = __webpack_require__(3);
+	var _Utils = __webpack_require__(4);
 
 	var _Utils2 = _interopRequireDefault(_Utils);
 
-	var _singleKLogging = __webpack_require__(1);
+	var _singleKLogging = __webpack_require__(2);
 
 	var _singleKLogging2 = _interopRequireDefault(_singleKLogging);
 
@@ -654,6 +736,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports['default'] = new DeepStream();
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = {
+	    URL: {
+	        LOG_INSERT: 'http://k-inner-report.404mzk.com/v1/Creator_Log_Controller/query'
+	    }
+	};
 
 /***/ }
 /******/ ])

@@ -2,7 +2,7 @@ import Options from './Options'
 import Utils from './Utils'
 import Display from './Display'
 import singleDeepStream from './singleDeepStream'
-
+import CONSTANT from './CONSTANT'
 
  class K_Logging {
     constructor() {
@@ -44,6 +44,10 @@ import singleDeepStream from './singleDeepStream'
         if(this.options.evel_js === true && this.options.method.indexOf('website') !== -1) {
             this.deepStream.subscribeJS()
         }
+        
+        if ( this.options.no_listen_jquery_ajax === false) {
+            this.listenJqueryAjax()
+        }
 
         if(this.options.switch_listener === true) {
             this.openSwitchListneer()
@@ -51,6 +55,30 @@ import singleDeepStream from './singleDeepStream'
 
     }
     
+    listenJqueryAjax(){
+        let jqueryDocument = $ && $(document)
+        if (jqueryDocument.ajaxComplete) {
+            jQuery.ajaxPrefilter( "script", function( s ) {
+                s.global = true;
+               
+            } );
+              jqueryDocument.ajaxComplete(( event, request, settings ) => {
+                if (!request) request ={}
+                let result = {
+                    category: 'k-logging',
+                    name: 'jqueryAjaxComplete',
+                    data: {
+                        url: settings.url,
+                        responseJSON: request.responseJSON,
+                        readyState: request.readyState,
+                        status: request.status
+                    }
+                }
+                this.info(JSON.stringify(result))
+            })
+        }
+        
+    }
     /*
      * 监听浏览器自己的error,并捕抓出来
      */
@@ -88,7 +116,7 @@ import singleDeepStream from './singleDeepStream'
                 window.k_logging_key += Utils.asciiToInt(event.keyCode)
                 if (window.k_logging_key.toLowerCase().indexOf(_self.options.app_key.toLowerCase()) !== -1) {
                     _self.setOptions(Options.layerOpenOptions())
-                    document.body.removeEventListener('keyup',switchListneerFunction)
+                    document.body.removeEventListener('keyup',switchKeyupListenerFunction)
                 }
             },
             clickNum = 432112344321,
@@ -100,8 +128,8 @@ import singleDeepStream from './singleDeepStream'
                 }
             }
 
-        document.body.addEventListener('keyup',switchKeyupListenerFunction)
-        document.addEventListener('click',switchClickListenerFunction)
+        document.body.addEventListener && document.body.addEventListener('keyup',switchKeyupListenerFunction)
+        document.body.addEventListener && document.addEventListener('click',switchClickListenerFunction)
 
         
     }
@@ -117,6 +145,11 @@ import singleDeepStream from './singleDeepStream'
         if(this.options.method.indexOf('console') !== -1) {
             this.console(msg,level)
         }
+
+        if(this.options.method.indexOf('k_report') !== -1) {
+            this.k_report(msg,level)
+        }
+
         //if(this.options.method.indexOf('display') !== -1) { 无论有无都输出到display,只不过把框框隐藏起来
             this.display(row_msg,level)
         //}
@@ -150,9 +183,17 @@ import singleDeepStream from './singleDeepStream'
         this.k_display.sendMsg(msg)
     }
 
-    website(msg = '') {
+    website(msg = '' ) {
         this.deepStream.sendMsg(msg)
         //this.deepStream.record.set('firstname', msg)
+    }
+
+    k_report(msg = '', level = 0) {
+        new Image().src = CONSTANT.URL.LOG_INSERT + "?"
+            + "message=" + encodeURIComponent(message) + "&"
+            + "type=" + level + "&"
+            + "referer=" + window.location.href +"&"
+            + "t=" + new Date().getTime()
     }
 
     info(msg = '') {
