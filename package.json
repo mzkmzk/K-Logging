@@ -80,7 +80,7 @@
       "autoFix": false
     },
     "ghooks": {
-      "commit-msg": "./scripts/validate-commit-msg",
+      "commit-msg": "node ./scripts/validate-commit-msg.js"
     }
   }
 }
