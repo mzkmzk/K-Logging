@@ -66,11 +66,11 @@
         "revert"
       ],
       "scope": {
-        "required": false,
+        "required": true,
         "allowed": [
           "*"
         ],
-        "validate": false,
+        "validate": true,
         "multiple": false
       },
       "warnOnFail": false,
