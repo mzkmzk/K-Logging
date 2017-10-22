@@ -56,8 +56,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	exports.__esModule = true;
-
 	__webpack_require__(1);
 
 	var _singleKLogging = __webpack_require__(2);
@@ -67,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	//import 'babel-polyfill'
-	exports['default'] = _singleKLogging2['default'];
+	module.exports = _singleKLogging2['default'];
 
 /***/ },
 /* 1 */
@@ -109,7 +107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	exports.__esModule = true;
+	__webpack_require__(1);
 
 	var _Options = __webpack_require__(3);
 
@@ -369,7 +367,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var singple = new K_Logging();
 	window.singleKLogging = singple; //兼容之前
 
-	exports['default'] = singple;
+	module.exports = singple;
 
 /***/ },
 /* 3 */

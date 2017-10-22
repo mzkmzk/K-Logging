@@ -1,11 +1,12 @@
 {
   "name": "k-logging",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "k-logging",
-  "main": "Public/index.bundle.js",
+  "main": "Build/singleKLogging.js",
   "scripts": {
     "publish-mac": "export NODE_ENV=prod&&webpack  --progress --colors",
-    "publish-win": "set NODE_ENV=prod&&webpack  --progress --colors"
+    "publish-win": "set NODE_ENV=prod&&webpack  --progress --colors",
+    "build": "babel ./Src --out-dir ./Build"
   },
   "repository": {
     "type": "git",

@@ -1,3 +1,4 @@
+import './polyfill'
 import Options from './Options'
 import Utils from './Utils'
 import Display from './Display'
@@ -209,8 +210,7 @@ import CONSTANT from './CONSTANT'
     }
 }
 
-let singple = new K_Logging()
-window.singleKLogging = singple //兼容之前
 
-export default singple
+
+export default K_Logging
 

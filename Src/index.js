@@ -1,5 +1,8 @@
 //import 'babel-polyfill'
 import './polyfill'
-import singleKLogging from './singleKLogging'
+import KLogging from './singleKLogging'
 
-export default singleKLogging
+let singple = new KLogging()
+window.singleKLogging = singple //兼容之前
+
+module.exports = singple
