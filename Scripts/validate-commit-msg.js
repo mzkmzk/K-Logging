@@ -1,4 +1,8 @@
+var validateMessage = require('validate-commit-msg');
 
-'use strict';
+var valid = validateMessage('chore(index): an example commit message');
 
-module.exports = require('../node_modules/validate-commit-msg/lib/validateMessage.js').validateMessage;
+console.log(valid);
+
+
+console.log(1)
