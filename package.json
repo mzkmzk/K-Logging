@@ -81,7 +81,7 @@
       "autoFix": false
     },
     "ghooks": {
-      "commit-msg": "node ./scripts/validate-commit-msg.js"
+      "commit-msg": "validate-commit-msg '$(git log -1 --pretty=%B)'"
     }
   }
 }
