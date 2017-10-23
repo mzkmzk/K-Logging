@@ -1,5 +1,15 @@
 <a name="1.0.5"></a>
-## [1.0.5](https://github.com/mzkmzk/K-Logging/compare/v1.0.6...v1.0.5) (2017-10-23)
+## [1.0.5](https://github.com/mzkmzk/K-Logging/compare/v1.0.7...v1.0.5) (2017-10-23)
+
+
+
+<a name="1.0.7"></a>
+## [1.0.7](https://github.com/mzkmzk/K-Logging/compare/v1.0.6...v1.0.7) (2017-10-23)
+
+
+### Features
+
+* add .giignore ([33dbfe8](https://github.com/mzkmzk/K-Logging/commit/33dbfe8))
 
 
 
